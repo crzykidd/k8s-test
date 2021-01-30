@@ -1,0 +1,30 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  labels:
+    app: homeassistant
+  name: homeassistant
+  namespace: homeassistant
+spec:
+  replicas: 1
+  strategy: {}
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: homeassistant
+    spec:
+      volumes:
+       - name: ha-storage
+         persistentVolumeClaim:
+          claimName: homeassistant-storage
+      containers:
+      - image: homeassistant/homeassistant/home-assistant:stable
+        name: home-assistant
+        volumeMounts:
+         - mountPath: "/config"
+           name: ha-storage
+        securityContext:
+          privileged: true
+      restartPolicy: Always
+status: {}
